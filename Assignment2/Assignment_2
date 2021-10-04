@@ -1,0 +1,13 @@
+/* Objective function */
+max: +420 L1 +360 M1 +300 S1 +420 L2 +360 M2 +300 S2 +420 L3 +360 M3 +300 S3;
+
+/* Constraints */
+Cap1: +L1 +M1 +S1 <= 750;
+cap2: +L2 +M2 +S2 <= 900;
+cap3: +L3 +M3 +S3 <= 450;
+space1: +20 L1 +15 M1 +12 S1 <= 13000;
+space2: +20 L2 +15 M2 +12 S2 <= 12000;
+space3: +20 L3 +15 M3 +12 S3 <= 5000;
+sale1: +L1 +L2 +L3 <= 900;
+sale2: +M1 +M2 +M3 <= 1200;
+sale3: +S1 +S2 +S3 <= 750;
