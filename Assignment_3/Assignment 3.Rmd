@@ -1,0 +1,122 @@
+---
+title: "Assignment 3"
+output: html_document
+---
+```{r}
+library(lpSolveAPI)
+library(lpSolve)
+getwd()
+setwd("C:/Users/anura/Desktop/Management Modelling/Assignment 3")
+```
+
+Now, load the library
+```{r}
+library(lpSolveAPI)
+```
+
+***
+Let us set up the WGC problem. Note that we had two decision variables, and three constraints.
+In the first formulation, we will directly create the objective function and constraints
+```{r}
+#lp object with 9 constraints and 9 decision variables
+lprec <- make.lp(nrow=0, ncol=9)
+set.objfn(lprec, c(420, 360, 300, 420, 360, 300, 420, 360, 300))
+lp.control(lprec,sense='max')
+add.constraint(lprec, c(1, 1, 1,0,0,0,0,0,0), "<=", 750)
+add.constraint(lprec, c(0,0,0,1, 1, 1,0,0,0), "<=", 900)
+add.constraint(lprec, c(0,0,0,0,0,0,1, 1, 1), "<=", 450)
+add.constraint(lprec, c(20,15,12,0,0,0,0,0,0), "<=", 13000)
+add.constraint(lprec, c(0,0,0,20,15,12,0, 0, 0), "<=", 12000)
+add.constraint(lprec, c(0,0,0,0,0,0,20, 15, 12), "<=", 5000)
+add.constraint(lprec, c(1,0,0,1,0,0,1, 0, 0), "<=", 900)
+add.constraint(lprec, c(0,1,0,0,1,0,0, 1, 0), "<=", 1200)
+add.constraint(lprec, c(0,0,1,0,0,1,0, 0, 1), "<=", 750)
+set.bounds(lprec, lower = c(0, 0), columns = c(1, 9)) #Not really needed
+RowNames <- c("Cap1", "cap2", "cap3", "space1","space2","space3", "sale1","sale2","sale3")
+ColNames <- c("L1", "M1","S1","L2", "M2","S2","L3", "M3","S3")
+dimnames(lprec) <- list(RowNames, ColNames)
+#Now, print out the model
+lprec
+write.lp(lprec,filename = "Assignment_3",type = "lp")
+solve(lprec)
+```
+
+```{r}
+rhs <- c(750,900,450,13000,12000,5000,900,1200,750,0,0,0)
+
+```
+
+
+
+```{r}
+get.objective(lprec)
+get.variables(lprec)
+```
+```{r}
+get.constraints(lprec)
+get.constraints(lprec) - rhs
+```
+```{r}
+get.sensitivity.rhs(lprec)
+get.sensitivity.obj(lprec)
+```
+#Dual Problem
+
+```{r}
+#Dual lp problem with 9 constraints and 12 decision variables.
+lprec2 <- make.lp(9,12)
+```
+
+```{r}
+# Set the objective function.
+set.objfn(lprec2, c(750,900,450,13000,12000,5000,900,1200,750,0,0,0))
+
+# Change the direction to set minimization
+lp.control(lprec2, sense = "min")
+```
+```{r}
+# Set the constraint values
+set.row(lprec2, 1, c(1,20,1,900,450), indices = c(1,4,7,10,12))
+set.row(lprec2, 2, c(1,15,1,900,450), indices = c(1,4,8,10,12))
+set.row(lprec2, 3, c(1,12,1,900,450), indices = c(1,4,9,10,12))
+set.row(lprec2, 4, c(1,20,1,-750,450), indices = c(2,5,7,10,11))
+set.row(lprec2, 5, c(1,15,1,-750,450), indices = c(2,5,8,10,11))
+set.row(lprec2, 6, c(1,12,1,-750,450), indices = c(2,5,9,10,11))
+set.row(lprec2, 7, c(1,20,1,-900,-450), indices = c(3,6,7,11,12))
+set.row(lprec2, 8, c(1,15,1,-900,-450), indices = c(3,6,8,11,12))
+set.row(lprec2, 9, c(1,12,1,-900,-450), indices = c(3,6,9,11,12))
+```
+```{r}
+# Set rhs values
+rhs2 <- c(420,420,420,360,360,360,300,300,300)
+set.rhs(lprec2, rhs2)
+```
+```{r}
+# Set constraint type
+set.constr.type(lprec2, c(">=",">=",">=",">=",">=",">=",">=",">=",">="))
+```
+
+```{r}
+#linear program solution
+solve(lprec2)
+```
+
+
+```{r}
+# Review objective function value
+get.objective(lprec2)
+```
+
+
+```{r}
+#Optimum decision variable values
+get.variables(lprec2)
+```
+
+```{r}
+get.sensitivity.rhs(lprec2)
+```
+
+```{r}
+get.sensitivity.obj(lprec2)
+```
