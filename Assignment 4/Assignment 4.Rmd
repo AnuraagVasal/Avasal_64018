@@ -1,0 +1,53 @@
+---
+title: "Assignment 4"
+author: "Anuraag Vasal"
+date: "10/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+setwd("C:/Users/anura/Desktop/Management Modelling/Assignment 4")
+library(readr)
+library(lpSolve)
+library(lpSolveAPI)
+```
+```{r}
+lp<- make.lp(0, 6)
+
+#Set Objective function
+set.objfn(lp, c(622, 614, 630, 641, 645, 649))
+#Add Constraints
+add.constraint(lp, c(1, 1, 1, 0, 0, 0),"<=", 100)
+add.constraint(lp, c(0, 0, 0, 1, 1, 1),"<=", 120)
+
+add.constraint(lp, c(1, 0, 0, 1, 0, 0),"=", 80)
+add.constraint(lp, c(0, 1, 0, 0, 1, 0),"=", 60)
+add.constraint(lp, c(0, 0, 1, 0, 0, 1),"=", 70)
+
+#Set Bounds
+set.bounds(lp, lower = c(0, 0, 0, 0, 0, 0),
+           columns = c(1:6))
+rownames<-c("PlanACapacity","PlantBCapacity","DemandW1","DemandW2","DemandW3")
+colnames<-c("PlantAW1","PlantAW2","PlantAW3","PlantBW1","PlantBW2","PlantBW3")
+dimnames(lp) <- list(rownames,colnames)
+write.lp(lp,filename="Assignment-4.lp",type = "lp")
+
+#Print
+print(lp)
+solve(lp)
+```
+```{r}
+#Get Objective
+get.objective(lp)
+
+```
+# Minimum combined cost of production and shipping is $132,790
+```{r}
+#Get Variables
+get.variables(lp)
+```
+# Plant A should produce 100 units and ship 60 units to warehouse 2 and 40 units to warehouse 3.
+# Plant B should produce 110 units and ship 80 units to warehouse 1 and 30 units to warehouse 3.
