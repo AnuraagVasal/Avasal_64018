@@ -1,0 +1,125 @@
+---
+title: "Assignment 5"
+author: "Anuraag Vasal"
+date: "11/7/2021"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Installing required packages
+```{r}
+library(lpSolveAPI)
+library(Benchmarking)
+```
+Setting Working Directory
+```{r}
+setwd("C:/Users/anura/Desktop/Quant Management Modelling/Assignment 5")
+```
+Input and output vectors
+```{r}
+x <- matrix(c(150,400,320,520,350,320,0.2,0.7,1.2,2.0,1.2,0.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000),ncol = 2)
+colnames(y) <- c("Reimbursed Patient-Days","Privately Paid Patient-Days")
+colnames(x) <- c("Staff Hours per Day","Supplies per Day")
+x
+y
+```
+FDH Method
+```{r}
+FDH <- dea(x,y,RTS = "fdh")
+FDH
+```
+
+```{r}
+peers(FDH)
+```
+```{r}
+lambda(FDH)
+```
+CRS Method
+```{r}
+CRS <- dea(x,y,RTS = "crs")
+CRS
+```
+```{r}
+peers(CRS)
+```
+```{r}
+lambda(CRS)
+```
+VRS Method
+```{r}
+VRS <- dea(x,y,RTS = "vrs")
+VRS
+```
+```{r}
+peers(VRS)
+```
+```{r}
+lambda(VRS)
+```
+IRS Method
+```{r}
+IRS <- dea(x,y,RTS = "irs")
+IRS
+```
+```{r}
+peers(IRS)
+```
+```{r}
+lambda(IRS)
+```
+DRS Method
+```{r}
+DRS <- dea(x,y,RTS = "drs")
+DRS
+```
+```{r}
+peers(DRS)
+```
+```{r}
+lambda(DRS)
+```
+FRH Method
+```{r}
+FRH <- dea(x,y,RTS = "add")
+FRH
+```
+```{r}
+peers(FRH)
+```
+```{r}
+lambda(FRH)
+```
+```{r}
+Table <- data.frame(FDH=c(1, 1, 1, 1, 1, 1), CRS=c(1, 1, 1, 1, 0.9775, 0.8675), VRS=c(1, 1, 1, 1, 1, 0.8963), IRS=c(1, 1, 1, 1, 1,0.8963), DRS=c(1, 1, 1, 1, 0.9775, 0.8675), FRH=c(1, 1, 1, 1, 1, 1))
+Combined <- cbind(x,y, Table)
+Combined
+```
+DMU 1,2,3 & 4 have efficiencies of 1 for all DEA analysis.
+
+DMU 5 has efficiency of 1 for FDH;VRS;IRS;FRH analysis but efficiency of 0.9775 for both CRS and DRS
+
+DMU 6 has efficiency of 1 for FDH and FRH analysis, for CRS and DRS analysis - 0.8675; VRS and IRS 0.8963
+
+#*Question 2
+```{r}
+library(lpSolveAPI)
+emax <- read.lp("emax_corp.lp")
+emax
+```
+```{r}
+solve(emax)
+```
+```{r}
+get.objective(emax)
+```
+```{r}
+get.variables(emax)
+```
+The objective function is 225. X1 = 0, X2 = 0, X3 = 15, Y1p = 25, Y1m = 0, Y2m = 0.
+This implies that since y1 = 0 and y2 = 0, so the first and second goals are fully satisfied.
