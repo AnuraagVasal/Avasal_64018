@@ -1,0 +1,106 @@
+---
+title: "Assignment 6"
+author: "Anuraag Vasal"
+date: "11/22/2021"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(lpSolveAPI)
+BIP<- read.lp("Assignment 6-1.lp")
+solve(BIP)
+```
+```{r}
+#Objective
+get.objective(BIP)
+```
+```{r}
+#Variables
+get.variables(BIP)
+```
+
+```{r}
+#Constraints
+get.constraints(BIP)
+```
+*Question 2(a)
+```{r}
+Stocks <- make.lp(0,8)
+lp.control(Stocks,sense="max")
+set.objfn(Stocks,c(4,6.5,5.9,5.4,5.15,10,8.4,6.25))
+set.type(Stocks,c(1:8), type = "integer")
+add.constraint(Stocks,c(40,50,80,60,45,60,30,25),"<=",2500000,indices = c(1:8))
+add.constraint(Stocks,1000,">=",0,indices = 1)
+add.constraint(Stocks,1000,">=",0,indices = 2)
+add.constraint(Stocks,1000,">=",0,indices = 3)
+add.constraint(Stocks,1000,">=",0,indices = 4)
+add.constraint(Stocks,1000,">=",0,indices = 5)
+add.constraint(Stocks,1000,">=",0,indices = 6)
+add.constraint(Stocks,1000,">=",0,indices = 7)
+add.constraint(Stocks,1000,">=",0,indices = 8)
+add.constraint(Stocks,40,">=",100000,indices = 1)
+add.constraint(Stocks,50,">=",100000,indices = 2)
+add.constraint(Stocks,80,">=",100000,indices = 3)
+add.constraint(Stocks,60,">=",100000,indices = 4)
+add.constraint(Stocks,45,">=",100000,indices = 5)
+add.constraint(Stocks,60,">=",100000,indices = 6)
+add.constraint(Stocks,30,">=",100000,indices = 7)
+add.constraint(Stocks,25,">=",100000,indices = 8)
+add.constraint(Stocks,c(40,50,80),"<=",1000000,indices = c(1,2,3))
+add.constraint(Stocks,c(60,45,60),"<=",1000000,indices = c(4,5,6))
+add.constraint(Stocks,c(30,25),"<=",1000000,indices = c(7,8))
+solve(Stocks)
+
+#Objective
+get.objective(Stocks)
+
+#Variables
+get.variables(Stocks)
+
+#Constraints
+get.constraints(Stocks)
+```
+
+*Question 2(b)
+
+```{r}
+
+Stocks1<-make.lp(0,8)
+lp.control(Stocks1,sense="max")
+set.objfn(Stocks1,c(4,6.5,5.9,5.4,5.15,10,8.4,6.25))
+add.constraint(Stocks1,c(40,50,80,60,45,60,30,25),"<=",2500000,indices = c(1:8))
+add.constraint(Stocks1,1000,">=",0,indices = 1)
+add.constraint(Stocks1,1000,">=",0,indices = 2)
+add.constraint(Stocks1,1000,">=",0,indices = 3)
+add.constraint(Stocks1,1000,">=",0,indices = 4)
+add.constraint(Stocks1,1000,">=",0,indices = 5)
+add.constraint(Stocks1,1000,">=",0,indices = 6)
+add.constraint(Stocks1,1000,">=",0,indices = 7)
+add.constraint(Stocks1,1000,">=",0,indices = 8)
+add.constraint(Stocks1,40,">=",100000,indices = 1)
+add.constraint(Stocks1,50,">=",100000,indices = 2)
+add.constraint(Stocks1,80,">=",100000,indices = 3)
+add.constraint(Stocks1,60,">=",100000,indices = 4)
+add.constraint(Stocks1,45,">=",100000,indices = 5)
+add.constraint(Stocks1,60,">=",100000,indices = 6)
+add.constraint(Stocks1,30,">=",100000,indices = 7)
+add.constraint(Stocks1,25,">=",100000,indices = 8)
+add.constraint(Stocks1,c(40,50,80),"<=",1000000,indices = c(1,2,3))
+add.constraint(Stocks1,c(60,45,60),"<=",1000000,indices = c(4,5,6))
+add.constraint(Stocks1,c(30,25),"<=",1000000,indices = c(7,8))
+solve(Stocks1)
+
+#Objective
+get.objective(Stocks1)
+
+#Variables
+get.variables(Stocks1)
+
+#Constraints
+get.constraints(Stocks1)
+```
